@@ -1,0 +1,5 @@
+{
+    "RewriteRules": {
+        "https://spark.apache.org/docs/latest/api/python/reference/api/pyspark.sql.DataFrame.html": "https://spark.apache.org/docs/3.2.1/api/python/reference/api/pyspark.sql.DataFrame.html"
+    }
+}
