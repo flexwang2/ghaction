@@ -4,7 +4,7 @@ on:
     types:
       - closed
     paths:
-      - "serving/featureflags/data/**"
+      - "serving/cdpush/data/**"
 jobs:
   if_merged:
     if: github.event.pull_request.merged == true
