@@ -1,24 +1,67 @@
-name: Feature Flag Check
+# name: Feature Flag Check
+# on:
+#   pull_request:
+#     types:
+#       - closed
+#     paths:
+#       - "serving/cdpush/data/**"
+# jobs:
+#   if_merged:
+#     if: github.event.pull_request.merged == true
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 2  # OR "2" -> To retrieve the preceding commit.
+#           submodules: recursive
+#       - name: Changed Files
+#         id: changed-files
+#         uses: tj-actions/changed-files@v29.0.9
+#       - run: |
+#           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+#             echo "$file was changed"
+#           done
+
+name: CI
+
 on:
+  push:
+    branches:
+      - main
   pull_request:
-    types:
-      - closed
-    paths:
-      - "serving/cdpush/data/**"
+    branches:
+      - main
+
 jobs:
-  if_merged:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest  # windows-latest | macos-latest
+    name: Test changed-files
     steps:
       - uses: actions/checkout@v3
         with:
-          fetch-depth: 2  # OR "2" -> To retrieve the preceding commit.
-          submodules: recursive
-      - name: Changed Files
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+      
+      # Example 1
+      - name: Get changed files
         id: changed-files
-        uses: tj-actions/changed-files@v29.0.9
-      - run: |
+        uses: tj-actions/changed-files@v29
+
+      - name: List all changed files
+        run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
+      
+      # Example 2
+      - name: Get changed files in the docs folder
+        id: changed-files-specific
+        uses: tj-actions/changed-files@v29
+        with:
+          files: |
+            docs/**
 
+      - name: Run step if any file(s) in the docs folder change
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          echo "One or more files in the docs folder has changed."
+          echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
