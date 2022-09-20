@@ -10,6 +10,11 @@ jobs:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
+      - name: Changed Files
+        id: changed-files
+        uses: tj-actions/changed-files@v29.0.9
       - run: |
-          echo The PR was merged
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
 
