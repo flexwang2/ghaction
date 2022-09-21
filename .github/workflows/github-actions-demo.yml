@@ -6,7 +6,7 @@ on:
     paths:
       - "serving/cdpush/data/**"
 jobs:
-  if_merged:
+  trigger-circleci:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
@@ -17,7 +17,18 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep serving/cdpush/data
+          files = $(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep serving/cdpush/data | awk -v d="," '{s=(NR==1?s:s d)$0}END{print s}')
+          echo $files
+      - name: print
+        uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `flex test`
+            })
           
 # name: CI
 
