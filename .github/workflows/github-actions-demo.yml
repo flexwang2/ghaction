@@ -17,7 +17,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep serving/cdpush/data | awk -v d="," '{s=(NR==1?s:s d)$0}END{print s}')
+          files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d="," '{s=(NR==1?s:s d)$0}END{print s}')
           echo $files
       - name: print
         uses: actions/github-script@v6
