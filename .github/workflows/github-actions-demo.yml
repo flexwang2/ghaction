@@ -29,7 +29,7 @@ on:
       - main
   pull_request:
     branches:
-      - .*
+      - flex/t3
 
 jobs:
   build:
