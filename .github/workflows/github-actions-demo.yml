@@ -15,6 +15,7 @@ jobs:
           PR_NUMBER: ${{ github.event.number }}
         run: |
           echo flexwang $PR_NUMBER 
+          gh pr view $PR_NUMBER  --json files --jq '.files.[].path'
           
 # name: CI
 
