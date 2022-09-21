@@ -24,12 +24,11 @@
 name: CI
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - flex/t3
+    types:
+      - closed
+    paths:
+      - "serving/cdpush/data/**"
 
 jobs:
   build:
