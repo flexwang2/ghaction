@@ -13,6 +13,7 @@ jobs:
       - name: print
         env:
           PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           echo flexwang $PR_NUMBER 
           gh pr view $PR_NUMBER  --json files --jq '.files.[].path'
