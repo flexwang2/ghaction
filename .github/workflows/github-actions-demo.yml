@@ -18,6 +18,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -x
+          export NEEVA_REPO="$(git rev-parse --show-toplevel)"
           files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
           echo $files
           cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-websearch-us-east-1/flex/cdpush/ -r us-east-1 --commit_hash c31cb7f7b2716c3e96b02bee0b7556849a532e91
