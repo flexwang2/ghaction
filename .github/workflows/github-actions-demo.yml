@@ -6,7 +6,7 @@ on:
     paths:
       - "serving/cdpush/data/**"
 jobs:
-  trigger-circleci:
+  trigger-cdpush:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
