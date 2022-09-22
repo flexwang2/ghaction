@@ -1,0 +1,7 @@
+type Query {
+  """Comment on root."""
+  root: String
+  a: String
+  c: String
+  b: String
+}

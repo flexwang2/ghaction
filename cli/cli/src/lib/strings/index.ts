@@ -1,0 +1,1 @@
+export { safeSplit } from './split';

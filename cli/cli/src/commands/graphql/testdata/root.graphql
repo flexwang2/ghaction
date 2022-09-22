@@ -1,0 +1,7 @@
+# include "a.graphql"
+# include "b.graphql"
+
+type Query {
+    "Comment on root."
+    root: String
+}

@@ -1,0 +1,10 @@
+# include "c.graphql"
+# include "enums.graphql"
+
+extend type Query {
+    a: A
+}
+
+type A {
+    val: AEnum
+}

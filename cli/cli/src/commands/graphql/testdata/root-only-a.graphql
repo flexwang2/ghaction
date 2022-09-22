@@ -1,0 +1,6 @@
+# include "a.graphql"
+
+type Query {
+    "Comment on root."
+    root: String
+}
