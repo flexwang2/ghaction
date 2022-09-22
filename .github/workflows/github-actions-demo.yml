@@ -22,7 +22,7 @@ jobs:
           role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
           #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
           role-duration-seconds: 1200
-          role-session-name: MySessionName
+          # role-session-name: MySessionName
       - name: Get CDPush data files
         env:
           PR_NUMBER: ${{ github.event.number }}
