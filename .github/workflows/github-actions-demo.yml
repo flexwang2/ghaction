@@ -12,6 +12,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+      - name: Configure AWS credentials from Test account
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
+          aws-region: us-east-1
       - name: Get CDPush data files
         env:
           PR_NUMBER: ${{ github.event.number }}
