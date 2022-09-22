@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Configure AWS credentials from Test account
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@b8c74de
         with:
           role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
           aws-region: us-east-1
