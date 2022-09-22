@@ -1,4 +1,4 @@
-name: Feature Flag Check
+name: CDPush
 on:
   pull_request:
     types:
