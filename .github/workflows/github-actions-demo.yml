@@ -1,4 +1,4 @@
-name: Feature Flag Check
+name: CDPush
 on:
   pull_request:
     types:
@@ -6,14 +6,14 @@ on:
     paths:
       - "serving/cdpush/data/**"
 jobs:
-  trigger-circleci:
+  trigger-cdpush:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Configure AWS credentials from Test account
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@b8c74de
         with:
           role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
           aws-region: us-east-1
