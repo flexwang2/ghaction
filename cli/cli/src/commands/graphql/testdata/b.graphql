@@ -1,0 +1,5 @@
+# include "c.graphql"
+
+extend type Query {
+    b: String
+}

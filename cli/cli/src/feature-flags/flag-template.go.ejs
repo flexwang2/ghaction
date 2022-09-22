@@ -1,0 +1,9 @@
+  package flags
+
+  // <%= goIdent %> <%= description %>
+  const <%= goIdent %> <%= goFlagType %> = <%= flagID %>
+  
+  func init() {
+    <%= goRegisterFlagFn %>(<%= goIdent %>)
+  }
+  
