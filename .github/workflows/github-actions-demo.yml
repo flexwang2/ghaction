@@ -18,7 +18,7 @@ jobs:
         with:
           aws-access-key-id: ASIARN3PTWWB42PULP6I
           aws-secret-access-key: n/s+YTPcD2vbDUYFm8GGlUPkmjeINmobZ8+7S8RV
-          aws-region: us-east-1
+          aws-region: us-west-2
           #role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
           #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
           #role-duration-seconds: 1200
