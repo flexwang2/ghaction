@@ -8,9 +8,9 @@ on:
       - "serving/cdpush/data/**"
 jobs:
   trigger-cdpush:
-    permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: write  # This is required for actions/checkout
+    # permissions:
+    #   id-token: write # This is required for requesting the JWT
+    #   contents: write  # This is required for actions/checkout
     #if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
