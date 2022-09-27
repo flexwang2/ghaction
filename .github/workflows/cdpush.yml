@@ -28,7 +28,6 @@ jobs:
         run: |
           set -x
           export NEEVA_REPO="$(git rev-parse --show-toplevel)"
-          eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           short_commit=$(git rev-parse --short $commit)
           git diff-tree --no-commit-id --name-only -r $commit | while read -r file; do
@@ -52,9 +51,9 @@ jobs:
         run: |
           set -x
           export NEEVA_REPO="$(git rev-parse --show-toplevel)"
-          eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           short_commit=$(git rev-parse --short $commit)
+          echo $(git diff-tree --no-commit-id --name-only -r $commit)
           git diff-tree --no-commit-id --name-only -r $commit | while read -r file; do
             if test -f $file; then
               echo CDPushing $file
