@@ -21,7 +21,7 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-US-EAST-1
-      - name: Get CDPush data files
+      - name: Get CDPush data files For us-east-1
         env:
           PR_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -33,7 +33,7 @@ jobs:
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit)
           echo $files
           cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $commit
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials For us-west-2
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-west-2
