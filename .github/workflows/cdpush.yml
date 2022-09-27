@@ -10,10 +10,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
-    # permissions:
-    #   id-token: write # This is required for requesting the JWT
-    #   contents: write  # This is required for actions/checkout
-    #if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
