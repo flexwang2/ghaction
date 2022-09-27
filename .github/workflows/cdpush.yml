@@ -10,6 +10,7 @@ jobs:
     permissions:
       id-token: write
       contents: read
+      pull-requests: write
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
@@ -38,6 +39,15 @@ jobs:
               echo skipping deleted file: $file
             fi
           done
+      - uses: actions/github-script@v6
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `CDPushed to east`
+            })
       - name: Configure AWS Credentials For us-west-2
         uses: aws-actions/configure-aws-credentials@v1
         with:
