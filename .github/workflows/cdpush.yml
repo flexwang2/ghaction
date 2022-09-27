@@ -30,7 +30,7 @@ jobs:
           export NEEVA_REPO="$(git rev-parse --show-toplevel)"
           eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
           files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
-          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid) | tr -d '"'
+          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           commit=$(git rev-parse --short $commit)
           echo CDPushing $files
           cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $commit
@@ -49,7 +49,7 @@ jobs:
           export NEEVA_REPO="$(git rev-parse --show-toplevel)"
           eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
           files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
-          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit) | tr -d '"'
+          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           commit=$(git rev-parse --short $commit)
           echo CDPushing $files
           cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-west-2/ -r us-west-2 --commit_hash $commit
