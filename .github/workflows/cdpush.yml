@@ -21,7 +21,7 @@ jobs:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-US-EAST-1
-      - name: Get CDPush data files For us-east-1
+      - name: CDPush to us-east-1
         env:
           PR_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +39,7 @@ jobs:
           aws-region: us-west-2
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-US-WEST-2
-      - name: Get CDPush data files
+      - name: CDPush to us-west-2
         env:
           PR_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
