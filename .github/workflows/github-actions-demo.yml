@@ -16,27 +16,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ASIARN3PTWWB6TYN767Y
-          aws-secret-access-key: YE8QH/V4C6aGfg+N/epiUsaZ08vvmzgn0cNTYAbc
-          aws-region: us-west-2
-          role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
-          #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
-          #role-duration-seconds: 1200
-          role-session-name: MySessionName
-      - name: Get CDPush data files
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -x
-          export NEEVA_REPO="$(git rev-parse --show-toplevel)"
-          eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
-          files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
-          echo $files
-          cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-websearch-us-east-1/flex/cdpush/ -r us-east-1 --commit_hash c31cb7f7b2716c3e96b02bee0b7556849a532e91
+      # - name: Configure AWS Credentials
+      #   uses: aws-actions/configure-aws-credentials@v1
+      #   with:
+      #     aws-access-key-id: ASIARN3PTWWB6TYN767Y
+      #     aws-secret-access-key: YE8QH/V4C6aGfg+N/epiUsaZ08vvmzgn0cNTYAbc
+      #     aws-region: us-west-2
+      #     role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
+      #     #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
+      #     #role-duration-seconds: 1200
+      #     role-session-name: MySessionName
+      # - name: Get CDPush data files
+      #   env:
+      #     PR_NUMBER: ${{ github.event.number }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     set -x
+      #     export NEEVA_REPO="$(git rev-parse --show-toplevel)"
+      #     eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
+      #     files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
+      #     echo $files
+      #     cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-websearch-us-east-1/flex/cdpush/ -r us-east-1 --commit_hash c31cb7f7b2716c3e96b02bee0b7556849a532e91
       - name: print
         uses: actions/github-script@v6
         with:
