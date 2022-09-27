@@ -16,16 +16,14 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v1
-      #   with:
-      #     aws-access-key-id: ASIARN3PTWWB6TYN767Y
-      #     aws-secret-access-key: YE8QH/V4C6aGfg+N/epiUsaZ08vvmzgn0cNTYAbc
-      #     aws-region: us-west-2
-      #     role-to-assume: arn:aws:iam::098481452419:role/human/flex@neeva.co
-      #     #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
-      #     #role-duration-seconds: 1200
-      #     role-session-name: MySessionName
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-west-2
+          role-to-assume: arn:aws:iam::098481452419:role/github-actions
+          #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
+          #role-duration-seconds: 1200
+          role-session-name: MySessionName
       - name: Get CDPush data files
         env:
           PR_NUMBER: ${{ github.event.number }}
