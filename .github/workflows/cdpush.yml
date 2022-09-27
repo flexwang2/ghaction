@@ -23,9 +23,7 @@ jobs:
         with:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
-          #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
-          #role-duration-seconds: 1200
-          role-session-name: MySessionName
+          role-session-name: CDPush-US-EAST-1
       - name: Get CDPush data files
         env:
           PR_NUMBER: ${{ github.event.number }}
@@ -43,9 +41,7 @@ jobs:
         with:
           aws-region: us-west-2
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
-          #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
-          #role-duration-seconds: 1200
-          role-session-name: MySessionName
+          role-session-name: CDPush-US-WEST-2
       - name: Get CDPush data files
         env:
           PR_NUMBER: ${{ github.event.number }}
@@ -57,7 +53,7 @@ jobs:
           files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit)
           echo $files
-          cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $commit
+          cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-west-2/ -r us-west-2 --commit_hash $commit
       # - uses: actions/github-script@v6
       #   with:
       #     script: |
