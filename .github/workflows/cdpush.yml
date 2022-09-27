@@ -1,0 +1,109 @@
+name: CDPush
+on:
+  pull_request:
+    types:
+      - closed
+    paths:
+      - "serving/cdpush/data/**"
+jobs:
+  trigger-cdpush:
+    permissions:
+      id-token: write
+      contents: read
+    # permissions:
+    #   id-token: write # This is required for requesting the JWT
+    #   contents: write  # This is required for actions/checkout
+    #if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::098481452419:role/github-actions
+          #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
+          #role-duration-seconds: 1200
+          role-session-name: MySessionName
+      - name: Get CDPush data files
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -x
+          export NEEVA_REPO="$(git rev-parse --show-toplevel)"
+          eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
+          files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
+          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit)
+          echo $files
+          cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $commit
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-region: us-west-2
+          role-to-assume: arn:aws:iam::098481452419:role/github-actions
+          #role-external-id: ${{ secrets.AWS_ROLE_EXTERNAL_ID }}
+          #role-duration-seconds: 1200
+          role-session-name: MySessionName
+      - name: Get CDPush data files
+        env:
+          PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -x
+          export NEEVA_REPO="$(git rev-parse --show-toplevel)"
+          eval $(go run neeva.co/cmd/prodaccess aws shell --eval)
+          files=$(gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | awk -v d=" " '{s=(NR==1?s:s d)$0}END{print s}')
+          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit)
+          echo $files
+          cli/cli.sh cdpush --data_files $files --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $commit
+      # - uses: actions/github-script@v6
+      #   with:
+      #     script: |
+      #       github.rest.issues.createComment({
+      #         issue_number: context.issue.number,
+      #         owner: context.repo.owner,
+      #         repo: context.repo.repo,
+      #         body: `Hi! It looks like you're changing a feature flag. Before you submit, please complete the following checklist. If you can't check off any of the following items, please hold off on submitting the PR until you can.
+      #       - [ ] This flag change is compatible with the current production binaries in targeted environments.
+      #       - [ ] This flag change is compatible with all client/versions OR I've restricted it to a particular client/version. _Please remember that we have three clients: web, mobile, and extension._
+      #       - [ ] I have tested this flag change in the target environment using a flag flip or experiment.
+      #       - [ ] If this is a new feature flag, I've also added a corresponding experiment so that we can control it for testing across all clients.
+      #       Most importantly:
+      #       - [ ] I am comfortable with this flag flip being pushed to production as soon as its submitted.
+      #       More information about best practices for feature flags is available in the [Feature flags in production doc](https://paper.dropbox.com/doc/JIrJWijXUEA5EkpEW5YYJ).
+      #       If you have any further questions, don't hesitate to reach out to a member of [neevaco/flag-reviewers](https://github.com/orgs/neevaco/teams/flag-reviewers) or ping the #release-train discussion on slack.`
+      #       })
+          
+# name: CI
+
+# on:
+#   pull_request:
+#     types:
+#       - closed
+#     paths:
+#       - "serving/data/**"
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest  # windows-latest | macos-latest
+#     name: Test changed-files
+#     steps:
+#       - uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 0   # OR "2" -> To retrieve the preceding commit.
+      
+#       # Example 2
+#       - name: Get changed files in the docs folder
+#         id: changed-files-specific
+#         uses: tj-actions/changed-files@v29
+#         with:
+#           files: |
+#             serving/cdpush/data/**
+
+#       - name: Run step if any file(s) in the docs folder change
+#         if: steps.changed-files-specific.outputs.any_changed == 'true'
+#         run: |
+#           echo "One or more files in the docs folder has changed."
+#           echo "List all the files that have changed: ${{ steps.changed-files-specific.outputs.all_changed_files }}"
