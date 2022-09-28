@@ -50,10 +50,10 @@ jobs:
           echo "::set-output name=cdpushed_files::${files}"
       - uses: actions/github-script@v6
         env:
-          PR_NUMBER: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
+          CDPUSHED: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
         with:
           script: |
-            const { PR_NUMBER } = process.env
+            const { CDPUSHED } = process.env
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
