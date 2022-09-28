@@ -75,7 +75,8 @@ export const CDPushCommand: CommandModule<Arguments, CDPushCommandArguments> = {
             const escapedTS = escapeTimestamp();
             let body = ""
             for (const file of data_files) {
-                body += `CDPushed ${file} to s3://neeva-cdpush-us-east-1/cdpush\n`
+                
+                body += `- [x] CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
                 const subdir =
                     'cdpush/' + file.replace('serving/cdpush/data/', '');
                 let object = '/v0.' + escapedTS;
