@@ -16,12 +16,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Configure AWS Credentials
+      - name: Configure AWS Credentials For us-east-1
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
-          role-session-name: CDPush-US-EAST-1
+          role-session-name: CDPush-us-east-1
       - name: CDPush to us-east-1
         id: cdpush-us-east-1
         env:
