@@ -42,7 +42,7 @@ jobs:
               echo skipping deleted file: $file
             fi
           done
-          echo ::set-output name=cdpushed_files::${files}
+          echo ::set-output name=cdpushed_files::"${files}"
       - uses: actions/github-script@v6
         with:
           script: |
