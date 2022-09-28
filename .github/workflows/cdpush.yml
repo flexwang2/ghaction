@@ -60,7 +60,7 @@ jobs:
             files = cdpushed.split(",")
             let body = "### CDPush to us-east-1 succeeded!\n"
             for (const file of files) {
-                body += `✅CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
+                body += `✅ CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
             }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
@@ -112,7 +112,7 @@ jobs:
             files = cdpushed.split(",")
             let body = "### CDPush to us-west-2 succeeded!\n"
             for (const file of files) {
-                body += `✅CDPushed \`${file}\` to \`s3://neeva-cdpush-us-west-2/cdpush\`\n`
+                body += `✅ CDPushed \`${file}\` to \`s3://neeva-cdpush-us-west-2/cdpush\`\n`
             }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
