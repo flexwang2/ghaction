@@ -53,14 +53,20 @@ jobs:
           CDPUSHED: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
         with:
           script: |
-            console.log(process.env)
-            const { CDPUSHED } = process.env.CDPUSHED
-
+            cdpushed = process.env.CDPUSHED
+            if (cdpushed.length === 0) {
+              return
+            }
+            files = cdpushed.split(",")
+            let body = ""
+            for (const file of data_files) {
+                body += `CDPushed ${file} to s3://neeva-cdpush-us-east-1/cdpush\n`
+            }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${CDPUSHED}`
+              body: body
             })
       - name: Configure AWS Credentials For us-west-2
         uses: aws-actions/configure-aws-credentials@v1
