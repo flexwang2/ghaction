@@ -36,7 +36,7 @@ jobs:
             if test -f $file; then
               echo CDPushing $file
               cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $short_commit
-              if [ -z ${NEEVA_USER+x} ]; then
+              if [ -z ${files+x} ]; then
                 export files=${file}
               else
                 files=${files},${file}
@@ -45,7 +45,7 @@ jobs:
               echo skipping deleted file: $file
             fi
           done
-          echo $files
+          echo ${files}
           echo ::set-output name=cdpushed_files::${files}
       - uses: actions/github-script@v6
         env:
