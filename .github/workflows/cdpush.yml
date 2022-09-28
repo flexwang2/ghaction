@@ -38,6 +38,7 @@ jobs:
               #cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 files=${file}
+                files=${files},${file}
                 echo ${files}
                 echo $files
               else
