@@ -23,6 +23,7 @@ jobs:
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-US-EAST-1
       - name: CDPush to us-east-1
+        id: cdpush-us-east-1
         env:
           PR_NUMBER: ${{ github.event.number }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,14 +32,17 @@ jobs:
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           short_commit=$(git rev-parse --short $commit)
+          files=""
           gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | while read -r file; do
             if test -f $file; then
               echo CDPushing $file
               cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $short_commit
+              files="${files}${file}$\n"
             else
               echo skipping deleted file: $file
             fi
           done
+          echo ::set-output name=cdpushed_files::${files}
       - uses: actions/github-script@v6
         with:
           script: |
@@ -46,7 +50,7 @@ jobs:
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `CDPushed to east`
+              body: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
             })
       - name: Configure AWS Credentials For us-west-2
         uses: aws-actions/configure-aws-credentials@v1
