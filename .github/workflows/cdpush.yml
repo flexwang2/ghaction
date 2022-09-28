@@ -47,7 +47,7 @@ jobs:
           done
           echo aaa
           echo ${files}
-          echo ::set-output name=cdpushed_files::${files}
+          # echo ::set-output name=cdpushed_files::${files}
       - uses: actions/github-script@v6
         env:
           PR_NUMBER: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
