@@ -44,13 +44,15 @@ jobs:
           done
           echo ::set-output name=cdpushed_files::"${files}"
       - uses: actions/github-script@v6
+        env:
+          PR_NUMBER: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
         with:
           script: |
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${steps.cdpush-us-east-1.outputs.cdpushed_files}`
+              body: `${PR_NUMBER}`
             })
       - name: Configure AWS Credentials For us-west-2
         uses: aws-actions/configure-aws-credentials@v1
