@@ -59,7 +59,7 @@ jobs:
             }
             files = cdpushed.split(",")
             let body = ""
-            for (const file of data_files) {
+            for (const file of files) {
                 body += `CDPushed ${file} to s3://neeva-cdpush-us-east-1/cdpush\n`
             }
             github.rest.issues.createComment({
