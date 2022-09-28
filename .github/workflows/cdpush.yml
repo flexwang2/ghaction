@@ -58,9 +58,9 @@ jobs:
               return
             }
             files = cdpushed.split(",")
-            let body = "Hi! 📀 CDPush succeeded.\n"
+            let body = "### CDPush to us-east-1 succeeded!\n"
             for (const file of files) {
-                body += `- [x] CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
+                body += `✅CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
             }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
