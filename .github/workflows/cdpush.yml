@@ -53,13 +53,14 @@ jobs:
           CDPUSHED: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
         with:
           script: |
-            const { CDPUSHED } = process.env
+            console.log(process.env)
+            const { CDPUSHED } = process.env.CDPUSHED
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: `${PR_NUMBER}`
+              body: `${CDPUSHED}`
             })
       - name: Configure AWS Credentials For us-west-2
         uses: aws-actions/configure-aws-credentials@v1
