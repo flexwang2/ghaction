@@ -32,6 +32,7 @@ jobs:
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           short_commit=$(git rev-parse --short $commit)
+          files=a
           gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | while read -r file; do
             if test -f $file; then
               echo CDPushing $file
