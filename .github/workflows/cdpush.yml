@@ -36,7 +36,7 @@ jobs:
           gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' | while read -r file; do
             if test -f $file; then
               echo CDPushing $file
-              cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $short_commit
+              #cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/ -r us-east-1 --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 export files=${file}
               else
