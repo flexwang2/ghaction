@@ -19,16 +19,33 @@ runs:
           aws-region: ${{inputs.aws-region}}
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-${{inputs.aws-region}}
-      - name: CDPush to ${{inputs.aws-region}}
-        id: cdpush-${{inputs.aws-region}}
+      - name: CDPush
+        id: cdpush
         shell: bash
         run: |
           set -x
+          export PR_NUMBER=113
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
+          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
+          short_commit=$(git rev-parse --short $commit)
+          # see http://mywiki.wooledge.org/BashFAQ/024 for why dumping into a file
+          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' > files.txt
+          while read -r file; do
+            if test -f $file; then
+              echo CDPushing $file
+              if [ -z ${files+x} ]; then
+                files=${file}
+              else
+                files=${files},${file}
+              fi
+            else
+              echo skipping deleted file: $file
+            fi
+          done < files.txt
           echo "::set-output name=cdpushed_files::${files}"
       - uses: actions/github-script@v6
         env:
-          CDPUSHED: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
+          CDPUSHED: ${{ steps.cdpush.outputs.cdpushed_files }}
         with:
           script: |
             cdpushed = process.env.CDPUSHED
