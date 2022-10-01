@@ -1,10 +1,9 @@
 name: 'Hello World'
 description: 'Greet someone'
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
+  aws-region:
+    description: "The aws region to push the data"
     required: true
-    default: 'World'
 outputs:
   random-number:
     description: "Random number"
@@ -14,14 +13,14 @@ runs:
   steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-      - name: Configure AWS Credentials For ${{inputs.who-to-greet}}
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-region: ${{inputs.who-to-greet}}
+          aws-region: ${{inputs.aws-region}}
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
-          role-session-name: CDPush-us-east-1
-      - name: CDPush to us-east-1
-        id: cdpush-us-east-1
+          role-session-name: CDPush-${{inputs.aws-region}}
+      - name: CDPush to ${{inputs.aws-region}}
+        id: cdpush-${{inputs.aws-region}}
         shell: bash
         run: |
           set -x
