@@ -19,4 +19,4 @@ jobs:
       - id: foo
         uses: ./.github/actions/cdpush
         with:
-          who-to-greet: 'us-east-1'
+          aws-region: 'us-east-1'
