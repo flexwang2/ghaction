@@ -23,28 +23,9 @@ runs:
       - name: CDPush to us-east-1
         id: cdpush-us-east-1
         shell: bash
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -x
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
-          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
-          short_commit=$(git rev-parse --short $commit)
-          # see http://mywiki.wooledge.org/BashFAQ/024 for why dumping into a file
-          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' > files.txt
-          while read -r file; do
-            if test -f $file; then
-              echo CDPushing $file
-              if [ -z ${files+x} ]; then
-                files=${file}
-              else
-                files=${files},${file}
-              fi
-            else
-              echo skipping deleted file: $file
-            fi
-          done < files.txt
           echo "::set-output name=cdpushed_files::${files}"
       - uses: actions/github-script@v6
         env:
