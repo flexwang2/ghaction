@@ -2,7 +2,7 @@ name: CDPush
 on:
   pull_request:
     types:
-      - closed
+      - edited
     paths:
       - "serving/cdpush/data/**"
 jobs:
@@ -11,112 +11,10 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
-    if: github.event.pull_request.merged == true
+    # if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Configure AWS Credentials For us-east-1
-        uses: aws-actions/configure-aws-credentials@v1
+      - id: foo
+        uses: ../actions/cdpush
         with:
-          aws-region: us-east-1
-          role-to-assume: arn:aws:iam::098481452419:role/github-actions
-          role-session-name: CDPush-us-east-1
-      - name: CDPush to us-east-1
-        id: cdpush-us-east-1
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -x
-          export NEEVA_REPO=$(git rev-parse --show-toplevel)
-          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
-          short_commit=$(git rev-parse --short $commit)
-          # see http://mywiki.wooledge.org/BashFAQ/024 for why dumping into a file
-          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' > files.txt
-          while read -r file; do
-            if test -f $file; then
-              echo CDPushing $file
-              # cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/flex/ -r us-east-1 --commit_hash $short_commit
-              if [ -z ${files+x} ]; then
-                files=${file}
-              else
-                files=${files},${file}
-              fi
-            else
-              echo skipping deleted file: $file
-            fi
-          done < files.txt
-          echo "::set-output name=cdpushed_files::${files}"
-      - uses: actions/github-script@v6
-        env:
-          CDPUSHED: ${{ steps.cdpush-us-east-1.outputs.cdpushed_files }}
-        with:
-          script: |
-            cdpushed = process.env.CDPUSHED
-            if (cdpushed.length === 0) {
-              return
-            }
-            files = cdpushed.split(",")
-            let body = "### CDPush to us-east-1 succeeded!\n"
-            for (const file of files) {
-                body += `✅ CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
-            }
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            })
-      - name: Configure AWS Credentials For us-west-2
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-region: us-west-2
-          role-to-assume: arn:aws:iam::098481452419:role/github-actions
-          role-session-name: CDPush-US-WEST-2
-      - name: CDPush to us-west-2
-        id: cdpush-us-west-2
-        env:
-          PR_NUMBER: ${{ github.event.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -x
-          export NEEVA_REPO=$(git rev-parse --show-toplevel)
-          commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
-          short_commit=$(git rev-parse --short $commit)
-          # see http://mywiki.wooledge.org/BashFAQ/024 for why dumping into a file
-          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' > files.txt
-          while read -r file; do
-            if test -f $file; then
-              echo CDPushing $file
-              # cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-west-2/flex/ -r us-west-2 --commit_hash $short_commit
-              if [ -z ${files+x} ]; then
-                files=${file}
-              else
-                files=${files},${file}
-              fi
-            else
-              echo skipping deleted file: $file
-            fi
-          done < files.txt
-          echo "::set-output name=cdpushed_files::${files}"
-      - uses: actions/github-script@v6
-        env:
-          CDPUSHED: ${{ steps.cdpush-us-west-2.outputs.cdpushed_files }}
-        with:
-          script: |
-            cdpushed = process.env.CDPUSHED
-            if (cdpushed.length === 0) {
-              return
-            }
-            files = cdpushed.split(",")
-            let body = "### CDPush to us-west-2 succeeded!\n"
-            for (const file of files) {
-                body += `✅ CDPushed \`${file}\` to \`s3://neeva-cdpush-us-west-2/cdpush\`\n`
-            }
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: body
-            })
+          who-to-greet: 'Mona the Octocat'
