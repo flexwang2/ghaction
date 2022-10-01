@@ -15,6 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - id: foo
-        uses: ../actions/cdpush@master
+        uses: ./.github/actions/cdpush
         with:
           who-to-greet: 'Mona the Octocat'
