@@ -4,10 +4,9 @@ inputs:
   aws-region:
     description: "The aws region to push the data"
     required: true
-outputs:
-  random-number:
-    description: "Random number"
-    value: ${{ steps.random-number-generator.outputs.random-number }}
+  github-token:
+    description: "The Github token for running github cli"
+    required: true
 runs:
   using: "composite"
   steps:
@@ -22,6 +21,8 @@ runs:
       - name: CDPush
         id: cdpush
         shell: bash
+        env:
+          GH_TOKEN: ${{ inputs.github-token }}
         run: |
           set -x
           export PR_NUMBER=113
