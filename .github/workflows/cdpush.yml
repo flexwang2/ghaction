@@ -37,7 +37,7 @@ jobs:
           while read -r file; do
             if test -f $file; then
               echo CDPushing $file
-              cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/flex/ -r us-east-1 --commit_hash $short_commit
+              # cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-east-1/flex/ -r us-east-1 --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 files=${file}
               else
@@ -89,7 +89,7 @@ jobs:
           while read -r file; do
             if test -f $file; then
               echo CDPushing $file
-              cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-west-2/flex/ -r us-west-2 --commit_hash $short_commit
+              # cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-us-west-2/flex/ -r us-west-2 --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 files=${file}
               else
