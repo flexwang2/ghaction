@@ -78,8 +78,8 @@ runs:
               body: body
             })
             github.rest.issues.addLabels({
-              owner: github.context.repo.owner,
-              repo: github.context.repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               issue_number: context.issue.number,
               labels: ["flexwang"],
             });
