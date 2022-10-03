@@ -21,12 +21,12 @@ jobs:
         with:
           aws-region: 'us-east-1'
           aws-bucket: 's3://neeva-cdpush-us-east-1'
-          pull-request: '115'
+          pull-request: ${{ github.event.number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - id: CDPush-us-west-2
         uses: ./.github/actions/cdpush
         with:
           aws-region: 'us-west-2'
           aws-bucket: 's3://neeva-cdpush-us-west-2'
-          pull-request: '115'
+          pull-request: ${{ github.event.number }}
           github-token: ${{ secrets.GITHUB_TOKEN }}
