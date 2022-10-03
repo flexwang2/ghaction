@@ -42,7 +42,7 @@ runs:
           while read -r file; do
             if test -f $file; then
               echo CDPushing $file
-              cli/cli.sh cdpush --data_files $file --s3_prefix=${AWS_BUCKET}/flex/ -r AWS_REGION --commit_hash $short_commit
+              cli/cli.sh cdpush --data_files $file --s3_prefix=${AWS_BUCKET}/flex/ -r ${AWS_REGION} --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 files=${file}
               else
