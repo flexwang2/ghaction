@@ -4,6 +4,9 @@ inputs:
   aws-region:
     description: "The aws region to push the data"
     required: true
+  aws-bucket:
+    description: "The aws bucket to push the data"
+    required: true
   github-token:
     description: "The Github token for running github cli"
     required: true
