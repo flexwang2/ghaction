@@ -7,6 +7,9 @@ inputs:
   github-token:
     description: "The Github token for running github cli"
     required: true
+  pull-request:
+    description: "The Github pull request number"
+    required: true
 runs:
   using: "composite"
   steps:
@@ -22,9 +25,9 @@ runs:
         shell: bash
         id: cdpush
         env:
-          PR_NUMBER: ${{ github.event.number }}
+          PR_NUMBER: ${{ inputs.pull-request }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AWS_REGION: ${{inputs.aws-region}}
+          AWS_REGION: ${{ inputs.aws-region }}
         run: |
           set -x
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
