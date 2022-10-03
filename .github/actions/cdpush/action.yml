@@ -66,7 +66,7 @@ runs:
             files = cdpushed.split(",")
             let body = `### CDPush to ${aws_region} succeeded!\n`
             for (const file of files) {
-                body += `✅ CDPushed \`${file}\` to \`${aws_bucket}/cdpush\`\n`
+                body += `✅ CDPushed \`${file}\` to \`${aws_bucket}/flex/cdpush\`\n`
             }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
