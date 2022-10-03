@@ -28,6 +28,7 @@ runs:
           PR_NUMBER: ${{ inputs.pull-request }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_REGION: ${{ inputs.aws-region }}
+          AWS_BUCKET: ${{ inputs.aws-bucket }}
         run: |
           set -x
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
@@ -38,7 +39,7 @@ runs:
           while read -r file; do
             if test -f $file; then
               echo CDPushing $file
-              cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-${AWS_REGION}/flex/ -r AWS_REGION --commit_hash $short_commit
+              cli/cli.sh cdpush --data_files $file --s3_prefix=${AWS_BUCKET}/flex/ -r AWS_REGION --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 files=${file}
               else
@@ -52,16 +53,20 @@ runs:
       - uses: actions/github-script@v6
         env:
           CDPUSHED: ${{ steps.cdpush.outputs.cdpushed_files }}
+          AWS_REGION: ${{ inputs.aws-region }}
+          AWS_BUCKET: ${{ inputs.aws-bucket }}
         with:
           script: |
             cdpushed = process.env.CDPUSHED
+            aws_region = process.env.AWS_REGION
+            aws_bucket = process.env.AWS_BUCKET
             if (cdpushed.length === 0) {
               return
             }
             files = cdpushed.split(",")
-            let body = "### CDPush to us-east-1 succeeded!\n"
+            let body = `### CDPush to ${aws_region} succeeded!\n`
             for (const file of files) {
-                body += `✅ CDPushed \`${file}\` to \`s3://neeva-cdpush-us-east-1/cdpush\`\n`
+                body += `✅ CDPushed \`${file}\` to \`${aws_bucket}/cdpush\`\n`
             }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
