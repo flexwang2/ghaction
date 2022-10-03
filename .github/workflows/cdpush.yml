@@ -2,7 +2,7 @@ name: CDPush
 on:
   pull_request:
     types:
-      - edited
+      - closed
     paths:
       - "serving/cdpush/data/**"
 jobs:
@@ -11,7 +11,7 @@ jobs:
       id-token: write
       contents: read
       pull-requests: write
-    # if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
