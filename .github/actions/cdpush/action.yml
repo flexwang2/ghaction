@@ -19,21 +19,23 @@ runs:
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-${{inputs.aws-region}}
       - name: CDPush
-        id: cdpush
         shell: bash
+        id: cdpush
         env:
-          GH_TOKEN: ${{ inputs.github-token }}
+          PR_NUMBER: ${{ github.event.number }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          AWS_REGION: ${{inputs.aws-region}}
         run: |
           set -x
-          export PR_NUMBER=113
           export NEEVA_REPO=$(git rev-parse --show-toplevel)
           commit=$(gh pr view $PR_NUMBER --json mergeCommit | jq .mergeCommit.oid | tr -d '"')
           short_commit=$(git rev-parse --short $commit)
           # see http://mywiki.wooledge.org/BashFAQ/024 for why dumping into a file
-          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' > files.txt
+          gh pr view $PR_NUMBER  --json files --jq '.files.[].path' | grep '^serving/cdpush/data' > files.txt
           while read -r file; do
             if test -f $file; then
               echo CDPushing $file
+              cli/cli.sh cdpush --data_files $file --s3_prefix=s3://neeva-cdpush-${AWS_REGION}/flex/ -r AWS_REGION --commit_hash $short_commit
               if [ -z ${files+x} ]; then
                 files=${file}
               else
