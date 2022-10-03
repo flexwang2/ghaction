@@ -16,14 +16,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - id: foo
+      - id: CDPush-us-east-1
         uses: ./.github/actions/cdpush
         with:
           aws-region: 'us-east-1'
           aws-bucket: 's3://neeva-cdpush-us-east-1'
           pull-request: '115'
           github-token: ${{ secrets.GITHUB_TOKEN }}
-      - id: foo
+      - id: CDPush-us-west-2
         uses: ./.github/actions/cdpush
         with:
           aws-region: 'us-west-2'
