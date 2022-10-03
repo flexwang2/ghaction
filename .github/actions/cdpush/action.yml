@@ -26,7 +26,7 @@ runs:
         id: cdpush
         env:
           PR_NUMBER: ${{ inputs.pull-request }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ inputs.github-token }}
           AWS_REGION: ${{ inputs.aws-region }}
           AWS_BUCKET: ${{ inputs.aws-bucket }}
         run: |
