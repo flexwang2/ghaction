@@ -26,7 +26,7 @@ runs:
         with:
           node-version: 16
           cache: 'npm'
-          cache-dependency-path: .github/actions/cdpush/package-lock.json
+          cache-dependency-path: ./ghaction/package-lock.json
       - shell: bash
         run: npm ci
       - shell: bash
