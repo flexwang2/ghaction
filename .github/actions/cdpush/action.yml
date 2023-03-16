@@ -26,6 +26,8 @@ runs:
         with:
           node-version: 16
           cache: 'npm'
+      - run: npm ci
+      - run: npm test
       - name: CDPush
         shell: bash
         id: cdpush
