@@ -17,11 +17,15 @@ runs:
   using: "composite"
   steps:
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
+        uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-region: ${{inputs.aws-region}}
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-${{inputs.aws-region}}
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'npm'
       - name: CDPush
         shell: bash
         id: cdpush
