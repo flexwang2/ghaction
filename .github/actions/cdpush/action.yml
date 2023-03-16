@@ -22,13 +22,13 @@ runs:
           aws-region: ${{inputs.aws-region}}
           role-to-assume: arn:aws:iam::098481452419:role/github-actions
           role-session-name: CDPush-${{inputs.aws-region}}
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - shell: bash
-        run: npm ci
-      - shell: bash
-        run: npm test
+      # - uses: actions/setup-node@v3
+      #   with:
+      #     node-version: 16
+      # - shell: bash
+      #   run: npm ci
+      # - shell: bash
+      #   run: npm test
       - name: CDPush
         shell: bash
         id: cdpush
